@@ -1,222 +1,162 @@
-<div align="center">
-<h1>Task Manager</h1>
-A Python-Django Task Manager Project with REST API 
-<br>
-<br>
-<img src="https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue">
-<img src="https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=green">
-<h3>Project's Short Demo</h3>
 
-https://github.com/MusfiqDehan/task-manager/assets/47440165/7219a3f5-e809-4182-8478-ec85f105a210
+# Task Management API
 
-For more detail overview visit this link: https://youtu.be/4XTaPGTVto0
 
-</div>
+## Features
 
-## Table of Contents
+- **Task Management (CRUD):**  
+  - Create, Read, Update, and Delete tasks.
+  - Tasks include attributes like Title, Description, Due Date, Priority Level, and Status.
+  - Validation for due date and status.
 
--   [Easy Login Info](#easy-login-info)
--   [Technology Used](#technology-used)
--   [Added Features](#added-features)
--   [How to Run Locally](#how-to-run-locally)
-    -   [Clone from GitHub](#clone-from-github)
-    -   [Setup PostgreSQL Database](#setup-postgresql-database)
-    -   [Import Data from db.json](#import-data-from-dbjson)
-    -   [Admin Panel](#admin-panel)
--   [API Details](#api-details)
+- **User Management (CRUD):**  
+  - Users can create an account, log in, and manage their tasks.
+  - Each user can only access and modify their own tasks.
 
-## Technology Used
+- **Mark Tasks as Complete or Incomplete:**
+  - Users can mark tasks as complete or incomplete.
+  - Once marked as complete, tasks cannot be edited unless reverted to incomplete.
 
--   **Frontend:** HTML5, CSS3, Bootstrap5, JavaScript
--   **Backend:** Python=3.11.4, Django=4.2.5
--   **Database:** PostgreSQL, (Hosted on Render for Production)
--   **Static and Media Upload:** AWS S3 Bucket using Cloudflare R2
--   **API:** Django-REST-Framework
--   **Version Control:** Git, GitHub
--   **Editor:** VS Code
--   **Operating System:** Ubuntu 23.04 LTS
--   **Browser(Tested On):** Google Chrome, Microsoft Edge, Mozilla Firefox
+- **Task Filters and Sorting:**
+  - Filter tasks by status, priority, and due date.
+  - Sort tasks by due date or priority.
 
-[⬆️**Go to Table of Contents**](#table-of-contents)
+## Installation
 
-## How to Run Locally
+Follow these steps to set up the project locally:
 
-### Clone from GitHub
+### Prerequisites
 
--   Install Python3
--   Install pip
+- Python 3.x
+- Django
+- Django REST Framework
+- PostgreSQL or SQLite (for database)
 
-```bash
-sudo apt install python3-pip
-```
+### Steps
 
--   Clone the repository
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/estherdomfeh213/task-manager.git
+   cd task-manager
+   ```
 
-```bash
-git clone https://github.com/MusfiqDehan/task-manager.git
-```
+2. Create and activate a virtual environment:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows, use 'venv\Scripts\activate'
+   ```
 
--   Go to the project directory
+3. Install the required dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-```bash
-cd task-manager
-```
+4. Set up the database:
+   - For SQLite (default), you can skip this step.
+   - For PostgreSQL, create a database and update the database settings in `project/settings.py`.
 
--   Create a virtual environment
+5. Apply migrations:
+   ```bash
+   python manage.py migrate
+   ```
 
-```bash
-python3 -m venv venv
-```
+6. Create a superuser to access the admin panel (optional):
+   ```bash
+   python manage.py createsuperuser
+   ```
 
--   Activate the virtual environment
+7. Run the development server:
+   ```bash
+   python manage.py runserver
+   ```
 
-```bash
-source venv/bin/activate
-```
+   The application will be available at `http://127.0.0.1:8000/`.
 
--   Install the dependencies
+### Frontend Setup
 
-```bash
-pip3 install -r requirements.txt
-```
+The frontend files (HTML, CSS, JS) are located in the `static/` directory. The static files are served by Django in development mode. The frontend interacts with the API through AJAX requests to the backend.
 
--   Run the server
+## API Endpoints
 
-```bash
-python manage.py runserver
-```
+### Authentication
 
--   Open the browser and go to http://127.0.0.1:8000/
+- **POST** `/api/auth/login/`:  
+  Log in a user and obtain a token for authentication.
 
--   To deactivate the virtual environment
+- **POST** `/api/auth/signup/`:  
+  Register a new user.
 
-```bash
-deactivate
-```
+### Task Management
 
-[⬆️**Go to Table of Contents**](#table-of-contents)
+- **GET** `/api/tasks/`:  
+  Get a list of tasks belonging to the authenticated user.
 
-### Setup PostgreSQL Database
+- **POST** `/api/tasks/`:  
+  Create a new task.
 
--   Install PostgreSQL
+- **GET** `/api/tasks/{id}/`:  
+  Get details of a specific task.
 
-```bash
-sudo apt install postgresql postgresql-contrib
-```
+- **PUT** `/api/tasks/{id}/`:  
+  Update a task.
 
--   Login to PostgreSQL
+- **DELETE** `/api/tasks/{id}/`:  
+  Delete a task.
 
-```bash
-sudo -u postgres psql
-```
+- **PATCH** `/api/tasks/{id}/complete_task/`:  
+  Mark a task as complete.
 
--   Create a database
+## Frontend
 
-```bash
-CREATE DATABASE task_manager;
-```
+The frontend is simple and built with HTML, CSS, and JavaScript. The main features include:
+- Viewing tasks
+- Marking tasks as complete
+- Displaying task details
 
--   Create a user
+It interacts with the backend API to retrieve and update task data.
 
-```bash
+### To use the frontend:
+1. Open `static/index.html` in a browser to interact with the application.
+2. The frontend communicates with the backend using AJAX calls defined in `static/js/script.js`.
 
-CREATE USER task_manager_user WITH PASSWORD 'task_manager_password';
-```
+## Deployment
 
--   Grant privileges to the user
+You can deploy the application to platforms like **Heroku** or **PythonAnywhere** for the backend. 
 
-```bash
-GRANT ALL PRIVILEGES ON DATABASE task_manager TO task_manager_user;
-```
+To deploy to **Heroku**:
 
--   Exit from PostgreSQL
+1. Make sure you have Heroku CLI installed.
+2. Create a new Heroku app:
+   ```bash
+   heroku create task-manager-app
+   ```
+3. Push the code to Heroku:
+   ```bash
+   git push heroku master
+   ```
+4. Open the app:
+   ```bash
+   heroku open
+   ```
 
-```bash
-\q
-```
+## Testing
 
--   Open the `settings.py` file from `task_manager` directory
-
--   Create a file named `.env` in the `task_manager` directory and add the following lines
-
-```bash
-SECRET_KEY=your_secret_key
-DEBUG=False
-DB_ENGINE=django.db.backends.postgresql
-DB_NAME=task_manager
-DB_USER=task_manager_user
-DB_PASSWORD=task_manager_password
-DB_HOST=localhost
-DB_PORT=5432
-```
-
-See the `.env.example` file for reference.
-
-[⬆️**Go to Table of Contents**](#table-of-contents)
-
-### Import Data from db.json
-
--   You will find a file named `db.json` in the root directory
-
--   Run the following command to import data from `db.json`
+To run the tests:
 
 ```bash
-python3 manage.py loaddata db.json
+python manage.py test
 ```
 
--   Migrate Database
+## License
 
-```bash
-python manage.py makemigrations
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgements
+
+- [Django](https://www.djangoproject.com/) - Python web framework used for backend development.
+- [Django REST Framework](https://www.django-rest-framework.org/) - Toolkit for building Web APIs in Django.
+- [Bootstrap](https://getbootstrap.com/) - Frontend framework used for responsive design.
 ```
 
-```bash
-python manage.py migrate
-```
+---
 
-[⬆️**Go to Table of Contents**](#table-of-contents)
-
-### Admin Panel
-
--   Run the server
-
-```bash
-python manage.py runserver
-```
-
--   Open the browser and go to http://127.0.0.1:8000/
-
--   To access the admin panel, go to http://127.0.0.1:8000/admin/
-
--   Login with the following credentials:
-
-    -   Username: `admin`
-    -   Password: `admin`
-
--   If these credentials don't work, you can create a superuser by running the following command:
-
-```bash
-python manage.py createsuperuser
-```
-
--   Enter the username, email, and password
-
--   Now you can access the admin panel with the credentials you have just created
-
-[⬆️**Go to Table of Contents**](#table-of-contents)
-
-## API Details
-
--   **Endpoint:** http://127.0.0.1:8000/tasks/api/v1/tasks
--   **Method:** GET
--   **Description:**
-    -   Returns all the tasks
--   **Endpoint:** http://127.0.0.1:8000/tasks/api/v1/tasks/1
--   **Method:** GET, PUT, PATCH, DELETE
--   **Description:**
-    -   Returns a single task
-    -   Updates a single task
-    -   Partially updates a single task
-    -   Deletes a single task
-
-[⬆️**Go to Table of Contents**](#table-of-contents)
